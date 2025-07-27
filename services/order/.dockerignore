@@ -1,0 +1,15 @@
+# Gradle cache
+.gradle/
+.gradle-cache/
+build/
+
+# IDE settings
+*.iml
+.idea/
+*.vscode/
+
+# Temp files
+*.swp
+*.DS_Store
+Thumbs.db
+

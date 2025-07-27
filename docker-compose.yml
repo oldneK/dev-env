@@ -1,0 +1,95 @@
+services:
+  monolith:
+    platform: linux/amd64
+    build:
+      context: ./monolith
+      dockerfile: dev.Dockerfile
+    container_name: monolith
+    env_file:
+      - env_files/monolith.env
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./monolith:/app:cached
+      - ./monolith/.gradle-cache:/app/.gradle
+      - monolith_gradle_cache:/home/gradle/.gradle
+    stdin_open: true
+    tty: true
+    profiles:
+      - monolith
+
+  user-service:
+    platform: linux/amd64
+    build:
+      context: ./services/user
+      dockerfile: dev.Dockerfile
+    container_name: user
+    env_file:
+      - env_files/user-service.env
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./services/user:/app:cached
+      - ./services/user/.gradle-cache:/app/.gradle
+      - user_service_gradle_cache:/home/gradle/.gradle
+    profiles:
+      - user
+
+  order-service:
+    platform: linux/amd64
+    build:
+      context: ./services/order
+      dockerfile: dev.Dockerfile
+    container_name: order
+    env_file:
+      - env_files/order-service.env
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./services/order:/app:cached
+      - ./services/order/.gradle-cache:/app/.gradle
+      - order_service_gradle_cache:/home/gradle/.gradle
+    profiles:
+      - order
+
+  db:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: mysql-custom.Dockerfile
+    container_name: mysql-db
+    env_file:
+      - env_files/mysql-db.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./.my.cnf:/root/.my.cnf:ro
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  mysql-data:
+  monolith_gradle_cache:
+  user_service_gradle_cache:
+  order_service_gradle_cache:
+
