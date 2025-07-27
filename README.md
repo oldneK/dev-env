@@ -146,7 +146,7 @@ dev-env/
 
 ### 3.2. How to Build and Run
 
-#### Prerequisites
+#### 3.2.1. Prerequisites
 
 To run this onboarding tool successfully, ensure the following requirements are met:
 
@@ -196,9 +196,11 @@ To run this onboarding tool successfully, ensure the following requirements are 
 ---
 
 
-#### Setup Instructions
+#### 3.2.2. Setup Instructions
 
 1. **Clone the Repository**
+
+   At your working directory, clone the dev-env repository and move into the dev-env directory.
 
       ```bash
       git clone https://github.com/oldneK/dev-env.git
@@ -274,7 +276,7 @@ To run this onboarding tool successfully, ensure the following requirements are 
 
 ---
 
-**Run Builds and Tests**
+#### 3.2.3. Run Builds and Tests
 
 To build and test (JUnit) a service inside its container, use:
 
@@ -293,7 +295,7 @@ You can open this file in your browser to explore coverage per class and method.
 
 ---
 
-**Database Migrations with Flyway**
+#### 3.2.4. Database Migrations with Flyway
 
 Each time you run `./onboard.sh`, it starts the relevant containers using Docker Compose. When the application containers start, Flyway will automatically apply the latest database schema and data migrations as part of the service startup process.
 
@@ -312,7 +314,7 @@ This ensures the latest schema changes are applied automatically.
 
 ---
 
-**Stopping the Environment**
+#### 3.2.5. Stopping the Environment
 
 To stop all containers:
 
@@ -322,8 +324,8 @@ docker compose --project-name dev-env down
 
 ---
 
-**Troubleshooting**
-####  Service Failures
+#### 3.2.6. Troubleshooting
+#####  Service Failures
 If a service crashes or fails to stay up after running `./onboard.sh`, follow these steps:
 
 1. **Check Logs**
@@ -356,13 +358,13 @@ If a service crashes or fails to stay up after running `./onboard.sh`, follow th
 
 ---
 
-#### Service fails to start due to build errors
+##### Service fails to start due to build errors
   If the application code contains compilation errors, the service will fail to start. 
   Please review the error messages shown during the build process, fix the issues in the source code, and then rerun the `onboard.sh` script.
 
 ---
 
-**Tips**
+#### 3.2.7. Tips
 
 * If you modify Java source files on the host, changes are detected and hot-reloaded automatically inside the container (via Spring Boot DevTools).
 
